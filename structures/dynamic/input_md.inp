@@ -1,0 +1,169 @@
+! &EXT_RESTART
+!   RESTART_FILE_NAME jbw-1.restart
+! &END EXT_RESTART
+
+&FORCE_EVAL
+  STRESS_TENSOR ANALYTICAL
+  METHOD QS
+
+  &DFT
+    BASIS_SET_FILE_NAME ! path to basis set file
+    POTENTIAL_FILE_NAME ! path to potential file
+    
+    CHARGE 0 
+                                  
+    &QS
+      METHOD GPW                                                                                  
+      EPS_DEFAULT 1.0E-10                                            
+    &END QS
+
+    &XC
+      &XC_FUNCTIONAL PBE
+        &PBE
+          PARAMETRIZATION REVPBE               
+        &END PBE
+      &END XC_FUNCTIONAL
+      &VDW_POTENTIAL
+        POTENTIAL_TYPE PAIR_POTENTIAL          
+        &PAIR_POTENTIAL
+          TYPE DFTD3                           
+          PARAMETER_FILE_NAME ! path to dispersion correction parameter file
+          REFERENCE_FUNCTIONAL revPBE           
+        &END PAIR_POTENTIAL
+      &END VDW_POTENTIAL
+    &END XC
+
+    &SCF
+      EPS_SCF 1.0E-6                         
+      SCF_GUESS RESTART                      
+      MAX_SCF 25                            
+      &OT
+        MINIMIZER DIIS                       
+        PRECONDITIONER FULL_SINGLE_INVERSE   
+      &END OT
+      &OUTER_SCF
+        EPS_SCF 1.0E-6                       
+        MAX_SCF 10                           
+      &END OUTER_SCF
+      &PRINT
+        &RESTART
+          ADD_LAST SYMBOLIC
+          &EACH
+            MD  100
+          &END EACH
+        &END RESTART
+      &END PRINT
+    &END SCF
+
+    &MGRID
+        CUTOFF 500                           
+        COMMENSURATE TRUE
+        NGRIDS 5                     
+    &END MGRID
+  &END DFT
+
+  &SUBSYS
+    &TOPOLOGY
+      COORD_FILE_NAME system.xyz ! input file, starting configuration
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+
+    &CELL
+      PERIODIC XYZ
+      A 7.9457798004  0.0000000000  0.0000000000                  
+      B 0.009580458  10.3373559426  0.0000000000            
+      C -0.9555824436  0.0405630809  15.1353698312             
+    &END CELL
+
+    &KIND Al
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE
+    &END KIND
+
+    &KIND Si
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE
+    &END KIND
+
+    &KIND O
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE
+    &END KIND
+
+    &KIND H
+      BASIS_SET DZVP-MOLOPT-GTH
+      POTENTIAL GTH-PBE
+    &END KIND
+
+    &KIND Na
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE
+    &END KIND
+
+    &KIND K
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE
+    &END KIND
+
+  &END SUBSYS
+&END FORCE_EVAL
+
+&GLOBAL
+  PREFERRED_FFT_LIBRARY FFTSG     
+  PRINT_LEVEL LOW                 
+  PROJECT jbw
+  RUN_TYPE MD                     
+&END GLOBAL
+
+&MOTION
+  &PRINT
+    &FORCES
+    ADD_LAST SYMBOLIC
+    &EACH
+      MD 1 
+    &END EACH
+    &END FORCES
+    &TRAJECTORY
+      FORMAT XYZ
+      &EACH
+       MD 1                    
+      &END EACH
+    &END TRAJECTORY
+    &CELL ON
+      &EACH
+        MD 1
+      &END EACH
+    &END CELL
+    &RESTART
+       ADD_LAST SYMBOLIC
+    &END RESTART
+    &RESTART_HISTORY
+      &EACH
+        MD  5000                   
+      &END EACH
+    &END RESTART_HISTORY
+  &END PRINT
+  &MD
+    ENSEMBLE NPT_F          
+    STEPS 60000                       
+    TIMESTEP 0.5                    
+    TEMPERATURE 300
+    &THERMOSTAT
+      TYPE NOSE                     
+      REGION GLOBAL                 
+      &NOSE
+        LENGTH 5                     
+        YOSHIDA 3                    
+        TIMECON 100  
+        MTS 2                      
+      &END NOSE
+    &END THERMOSTAT
+    &BAROSTAT
+      PRESSURE [atm] 1
+      TIMECON 1000    
+    &END BAROSTAT
+    &PRINT
+      FORCE_LAST
+    &END PRINT
+  &END MD
+&END MOTION
