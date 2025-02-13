@@ -1,0 +1,35 @@
+General:
+    SYSTEM = JBW
+    ISTART = 0
+    ISMEAR = 0   ! Gaussian smearing
+    SIGMA = 0.05
+    EDIFF = 1.0E-8
+    EDIFFG = 1.0E-7
+    ENCUT = 600
+    ISYM = 0
+    NELM = 300
+    PREC = Accurate
+    NELMIN = 8
+    LWAVE = .FALSE.
+    LCHARG = .FALSE.
+!    LORBIT = 11
+    LASPH = .TRUE. 
+    NCORE = 28
+    
+
+Van der Waals Interaction (vasp 5.3.5 patched verion):
+    IVDW = 12      ! D3 and Becke-Johnson damping
+
+dynamic:
+    IBRION = 2        ! Conjugate gradient
+    NSW    = 150      ! Number of ionic steps
+    ISIF   = 3        !
+
+!    LCHIMAG = .TRUE. ! calculate chemical shift through linear response
+!    DQ = 0.001 ! default 0.001; step size for FD kspace derivative
+!    ICHIBARE = 1 ! default 1; order of FD to calc magnetic susceptibility
+!    LNMR_SYM_RED = .TRUE. ! remove sym operations that are inconsistent with the kspace derivative calculations in the linear response calc
+!    NSLPLINE = .FALSE. ! do not make PAW projectors kdifferentiable; okay if only chem shift are considered, otherwise advisable to set to false
+
+!   LEFG = .TRUE. ! calculate electrical field gradient
+!   QUAD_EFG = 0.0 146.6 -25.58 104.0 58.5
