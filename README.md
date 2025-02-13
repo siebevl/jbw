@@ -1,5 +1,5 @@
 # How Water and Ion Mobility Affect the NMR Fingerprints of the Hydrated JBW Zeolite: A Combined Computational-Experimental Investigation
-This repository will contain some data related to the following publication <https://doi.org/10.1002/chem.202202621>. For now, the Supporting Information may be found here.
+This repository contains data related to the following publication <https://doi.org/10.1002/chem.202202621>. The Supporting Information may be found here.
 
 ![TOC](https://github.com/siebevanlommel/jbw/assets/56164541/4b5c2b1e-a652-4389-baab-68c249cef9b2)
 
